@@ -31,10 +31,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         adapter = new RepoAdapter(this);
         presenter = new MainPresenter(this);
         rvRepos.setAdapter(adapter);
-        rvRepos.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rvRepos.setLayoutManager(linearLayoutManager);
         presenter.getRepos(currentPage);
 
-        rvRepos.addOnScrollListener(new PaginationListener(new LinearLayoutManager(this)) {
+        rvRepos.addOnScrollListener(new PaginationListener(linearLayoutManager) {
             @Override
             protected void loadMoreItems() {
                 currentPage++;

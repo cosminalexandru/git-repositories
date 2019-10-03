@@ -1,26 +1,27 @@
 package com.mready.presentation.screens.feed;
 
+import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.widget.Toast;
-
 import com.mready.R;
 import com.mready.models.Item;
 import com.mready.models.PublicRepositories;
-import com.mready.presentation.screens.feed.MainContract;
-import com.mready.presentation.screens.feed.MainPresenter;
-import com.mready.presentation.screens.feed.OnRepoClickListener;
-import com.mready.presentation.screens.feed.RepoAdapter;
 import com.mready.presentation.screens.single_repo.SingleRepoActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View, OnRepoClickListener {
 
     private RecyclerView rvRepos;
     private RepoAdapter adapter;
     private MainPresenter presenter;
+    private int currentPage = 0;
+    private List<Item> repos = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +31,26 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         adapter = new RepoAdapter(this);
         presenter = new MainPresenter(this);
         rvRepos.setAdapter(adapter);
-        rvRepos.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
-        presenter.getRepos();
+        rvRepos.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        presenter.getRepos(currentPage);
+
+        rvRepos.addOnScrollListener(new PaginationListener(new LinearLayoutManager(this)) {
+            @Override
+            protected void loadMoreItems() {
+                currentPage++;
+                presenter.getRepos(currentPage);
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return false;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return false;
+            }
+        });
     }
 
     @Override
@@ -42,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void showRepos(PublicRepositories result) {
-        adapter.setItems(result.getItems());
+        repos.addAll(result.getItems());
+        adapter.setItems(repos);
     }
 
     @Override

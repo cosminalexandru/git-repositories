@@ -16,9 +16,9 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void getRepos() {
+    public void getRepos(int currentPage) {
         BackendService backendService = RetrofitInit.initRetrofit().create(BackendService.class);
-        Call call = backendService.getRepositories();
+        Call call = backendService.getRepositories(currentPage);
          call.enqueue(new Callback() {
              @Override
              public void onResponse(Call call, Response response) {

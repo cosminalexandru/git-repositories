@@ -12,7 +12,7 @@ public interface MainContract {
 
     interface Presenter{
 
-        void getRepos();
+        void getRepos(int currentPage);
     }
 
 }

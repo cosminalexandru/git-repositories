@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">git-repositories</string>
+    <string name="repository_name">Repository Name</string>
+    <string name="stars_number">stars number</string>
+    <string name="number_template">213343</string>
+    <string name="score">Score</string>
+    <string name="watchers">Watchers</string>
+    <string name="forks">Forks</string>
 </resources>
